@@ -8,6 +8,13 @@
     android:orientation="vertical"
     tools:context=".LoginActivity">
 
+    <ImageView
+        android:id="@+id/instaLogo"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_weight="1"
+        app:srcCompat="@drawable/ic_logo_instagram" />
+
     <EditText
         android:id="@+id/etUsername"
         android:layout_width="match_parent"
@@ -32,6 +39,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:backgroundTint="#5851DB"
         android:text="Login" />
 
 </LinearLayout>
