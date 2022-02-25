@@ -15,6 +15,13 @@
         android:layout_weight="1"
         app:srcCompat="@drawable/icon" />
 
+    <ImageView
+        android:id="@+id/instagramLong"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_weight="1"
+        app:srcCompat="@drawable/ic_logo_instagram" />
+
     <EditText
         android:id="@+id/etUsername"
         android:layout_width="match_parent"
