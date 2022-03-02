@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.instagramclone.EndlessRecyclerViewScrollListener;
 import com.example.instagramclone.Post;
 import com.example.instagramclone.PostsAdapter;
 import com.example.instagramclone.R;
@@ -21,6 +22,7 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +36,8 @@ public class PostsFragment extends Fragment {
     protected PostsAdapter adapter;
     protected List<Post> allPosts;
     protected SwipeRefreshLayout swipeContainer;
+    protected EndlessRecyclerViewScrollListener scrollListener;
+    private LinearLayoutManager linearLayoutManager;
 
 
     public PostsFragment() {
@@ -82,8 +86,18 @@ public class PostsFragment extends Fragment {
                 android.R.color.holo_red_light);
 
         //4 set the layout manager on the recycler view
-        rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
+        linearLayoutManager = new LinearLayoutManager(getContext());
+        rvPosts.setLayoutManager(linearLayoutManager);
+
+        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                queryPosts();
+            }
+        };
+
         queryPosts();
+        rvPosts.addOnScrollListener(scrollListener);
     }
 
     protected void queryPosts() {
@@ -99,7 +113,11 @@ public class PostsFragment extends Fragment {
                     Log.e(TAG,"Issue with getting posts",e);
                 }
                 for (Post post : posts) {
-                    Log.i(TAG,"Post: " + post.getDescription() + ", username: " + post.getUser().getUsername());
+                    SimpleDateFormat DateFor = new SimpleDateFormat("dd/MM/yyyy");
+                    SimpleDateFormat DateTimeFor = new SimpleDateFormat("h:mm a");
+                    String stringDate = DateFor.format(post.getDateMe());
+                    String stringTime = DateTimeFor.format(post.getDateMe());
+                    Log.i(TAG,"Post: " + post.getDescription() + ", username: " + post.getUser().getUsername() + " date: " + stringDate + " time " + stringTime);
                 }
                 addAll(posts);
                 swipeContainer.setRefreshing(false);

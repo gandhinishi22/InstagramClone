@@ -15,6 +15,13 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         tools:text="rahul" />
 
+    <TextView
+        android:id="@+id/tvTimeDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textColor="#050303" />
+
     <ImageView
         android:id="@+id/ivImage"
         android:layout_width="match_parent"
