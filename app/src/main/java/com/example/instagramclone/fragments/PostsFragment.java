@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,6 +33,7 @@ public class PostsFragment extends Fragment {
     private RecyclerView rvPosts;
     protected PostsAdapter adapter;
     protected List<Post> allPosts;
+    protected SwipeRefreshLayout swipeContainer;
 
 
     public PostsFragment() {
@@ -59,6 +61,26 @@ public class PostsFragment extends Fragment {
         //2 create the data source
         //3 set the adapter on the recycler view
         rvPosts.setAdapter(adapter);
+
+        //Swipe Refresh
+        swipeContainer = (SwipeRefreshLayout)view.findViewById(R.id.swipeContainer);
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Your code to refresh the list here.
+                // Make sure you call swipeContainer.setRefreshing(false)
+                // once the network request has completed successfully.
+                clear();
+                queryPosts();
+            }
+        });
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
         //4 set the layout manager on the recycler view
         rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
         queryPosts();
@@ -79,9 +101,21 @@ public class PostsFragment extends Fragment {
                 for (Post post : posts) {
                     Log.i(TAG,"Post: " + post.getDescription() + ", username: " + post.getUser().getUsername());
                 }
-                allPosts.addAll(posts);
-                adapter.notifyDataSetChanged();
+                addAll(posts);
+                swipeContainer.setRefreshing(false);
+                //adapter.notifyDataSetChanged();
             }
         });
+    }
+
+    public void clear() {
+        allPosts.clear();
+        adapter.notifyDataSetChanged();
+    }
+
+    // Add a list of items -- change to type used
+    public void addAll(List<Post> posts) {
+        allPosts.addAll(posts);
+        adapter.notifyDataSetChanged();
     }
 }
