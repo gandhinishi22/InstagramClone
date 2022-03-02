@@ -65,6 +65,10 @@ public class MainActivity extends AppCompatActivity {
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("Instagram");
+        //actionBar.setDisplayShowHomeEnabled(true);
+        //actionBar.setLogo(R.drawable.ic_baseline_photo_camera_24);
+        //actionBar.setDisplayUseLogoEnabled(true);
+
 
         ColorDrawable colorDrawable = new ColorDrawable(Color.parseColor("#950F63"));
         actionBar.setBackgroundDrawable(colorDrawable);
