@@ -92,12 +92,38 @@ public class PostsFragment extends Fragment {
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                queryPosts();
+                queryPostsTwo();
             }
         };
 
         queryPosts();
         rvPosts.addOnScrollListener(scrollListener);
+    }
+
+    protected void queryPostsTwo() {
+        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
+        //get all the posts
+        query.include(Post.KEY_USER);
+        query.setLimit(30);
+        query.addAscendingOrder(Post.KEY_CREATED_KEY);
+        query.findInBackground(new FindCallback<Post>() {
+            @Override
+            public void done(List<Post> posts, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG,"Issue with getting posts",e);
+                }
+                for (Post post : posts) {
+                    SimpleDateFormat DateFor = new SimpleDateFormat("dd/MM/yyyy");
+                    SimpleDateFormat DateTimeFor = new SimpleDateFormat("h:mm a");
+                    String stringDate = DateFor.format(post.getDateMe());
+                    String stringTime = DateTimeFor.format(post.getDateMe());
+                    Log.i(TAG,"PostTWOOOO: " + post.getDescription() + ", username: " + post.getUser().getUsername() + " date: " + stringDate + " time " + stringTime);
+                }
+                addAll(posts);
+                swipeContainer.setRefreshing(false);
+                //adapter.notifyDataSetChanged();
+            }
+        });
     }
 
     protected void queryPosts() {
